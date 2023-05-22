@@ -7,6 +7,26 @@
           <option name="caretOffset" value="0" />
           <option name="fileUrl" value="file://$PROJECT_DIR$/README.md" />
         </OpenedFileInfo>
+        <OpenedFileInfo>
+          <option name="caretOffset" value="187" />
+          <option name="fileUrl" value="file://$PROJECT_DIR$/source.hpp" />
+        </OpenedFileInfo>
+        <OpenedFileInfo>
+          <option name="caretOffset" value="1951" />
+          <option name="fileUrl" value="file://$PROJECT_DIR$/scanner.lex" />
+        </OpenedFileInfo>
+        <OpenedFileInfo>
+          <option name="caretOffset" value="2137" />
+          <option name="fileUrl" value="file://$PROJECT_DIR$/hello.txt" />
+        </OpenedFileInfo>
+        <OpenedFileInfo>
+          <option name="caretOffset" value="2135" />
+          <option name="fileUrl" value="file://$PROJECT_DIR$/hello2.txt" />
+        </OpenedFileInfo>
+        <OpenedFileInfo>
+          <option name="caretOffset" value="0" />
+          <option name="fileUrl" value="file://$PROJECT_DIR$/parser.ypp" />
+        </OpenedFileInfo>
       </list>
     </option>
   </component>
