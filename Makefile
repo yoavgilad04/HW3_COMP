@@ -8,3 +8,5 @@ clean:
 	rm -f lex.yy.c
 	rm -f parser.tab.*pp
 	rm -f hw3
+#all:
+#	g++ -std=c++17 -o hw3 main.cpp symbol_table.cpp
