@@ -33,5 +33,4 @@ public:
 
 //ostream& operator<<(ostream& os, const SymbolTable& t)
 
-
 #endif //HW3_SYMBOL_TABLE_HPP

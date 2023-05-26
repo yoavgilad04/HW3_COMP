@@ -3,77 +3,127 @@
 
 #include <string>
 #include <iostream>
+#include <assert.h>
 #include "hw3_output.hpp"
+#include "symbol_table.hpp"
+
+stack <SymbolTable*> sts;
 
 extern int yylineno;
 using namespace std;
 
-class Node {
+class Node
+        {
 public:
     string value;
-    Node(string text=""): value(text){
-        cout << "I'm inside node builder "<< this->value << endl;
-    };
+    Node(string text=""): value(text)
+    {
+        cout << "I'm inside node builder: "<< this->value << endl;
+    }
 };
 
 #define YYSTYPE Node*
 
 
-
 class Exp : public Node
 {
 public:
-    string type;
-    Exp(string text, string type): Node(text), type(type)
+    Exp(const string& text): Node(text)
     {
-        cout << "text: " << this->value << " type: " << this->type << endl;
+        cout << "first exp " << this->value << endl;
     }
 
-    Exp(Exp& exp_1, string , string conversion_type)
+    Exp(string text, const string& type): Node(text)
     {
-
-    }
-
-    Exp(string text, string type, string operation_type): Node(text)
-    {
-
-    }
-
-    Exp(Exp& exp_1, Exp& exp_2, string operation_val)
-    {
-        if (operation_val == "+" || operation_val == "-" || operation_val == "*" || operation_val == "/")
+        cout << "second exp " << text << "," << type << endl;
+        if (type == "id")
         {
-            if ((exp_1.type == "int" || exp_1.type == "byte") && (exp_2.type == "int" || exp_2.type == "byte"))
+            //TODO: yoav
+            return;
+        }
+        if (type == "byte")
+        {
+            int real_val = stoi(text);
+            if (real_val > 255 || real_val < 0)
             {
-                if(exp_1.type == "int" || exp_2.type == "int")
-                    this->type = "int";
-                else
-                    this->type = "byte";
-
-                switch(operation_val){
-                    case "+":
-                        this->value = exp_1.value + exp_2.value;
-                        return;
-                    case "-":
-                        this->value = exp_1.value - exp_2.value;
-                        return;
-                    case "*":
-                        this->value = exp_1.value * exp_2.value;
-                        return;
-                    case "/":
-                        this->value = exp_1.value / exp_2.value;
-                        return;
-                }
+                output::errorByteTooLarge(yylineno, text);
+                exit(0);
             }
-            else
-            {
-                output::errorMismatch(yylineno);
-            }
+            this->value = type;
             return;
         }
 
     }
 
+    Exp(Node& exp, const string& conversion_type)
+    {
+        cout << "third exp " << exp.value << "," << conversion_type << endl;
+        if (conversion_type == "not")
+        {
+            if (exp.value == "bool")
+            {
+                this->value = "bool";
+                return;
+            }
+            output::errorMismatch(yylineno);
+            exit(0);
+        }
+        if (conversion_type == "int" || conversion_type == "byte")
+        {
+            if (exp.value == "int" || exp.value == "byte")
+            {
+                if(conversion_type == "int")
+                    this->value = "int";
+                else // conversion type == "byte"
+                    this->value = "byte";
+                return;
+            }
+            output::errorMismatch(yylineno);
+            exit(0);
+        }
+        assert(conversion_type=="bool");
+        if (exp.value == "bool")
+        {
+            this->value = "bool";
+            return;
+        }
+        output::errorMismatch(yylineno);
+        exit(0);
+    }
+
+    Exp(Node& exp_1, Node& exp_2, const string& operation_val)
+    {
+        cout << "fourth exp " << exp_1.value << "," << exp_2.value << "," << operation_val << endl;
+        if ((exp_1.value == "int" || exp_1.value == "byte") && (exp_2.value == "int" || exp_2.value == "byte"))
+        {
+            if (operation_val == "binop")
+            {
+                if(exp_1.value == "int" || exp_2.value == "int")
+                    this->value = "int";
+                else
+                    this->value = "byte";
+                return;
+            }
+            if (operation_val == "relop")
+            {
+                this->value = "bool";
+                return;
+            }
+            output::errorMismatch(yylineno);
+            exit(0);
+        }
+        if (exp_1.value == "bool" && exp_2.value == "bool"){
+            if (operation_val == "bool_op"){
+                this->value = "bool";
+                return;
+            }
+        }
+        output::errorMismatch(yylineno);
+        exit(0);
+    }
+
 };
+
+
 
 #endif
