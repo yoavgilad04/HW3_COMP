@@ -1,11 +1,11 @@
 %{
 #include "source.hpp"
-#include "output.hpp"
+#include "hw3_output.hpp"
 #include <iostream>
+#include <stdlib.h>
 using namespace std;
-int yylex();
+extern int yylex();
 void yyerror(const char*);
-extern int yylineno;
 %}
 
 %nonassoc STRING;
@@ -93,11 +93,13 @@ Type:           INT                                                             
                 | BOOL                                                              {output::printProductionRule(34);}
 ;
 Exp:            LPAREN Exp RPAREN                                                   {output::printProductionRule(35);}
-                | Exp ADD Exp                                                       {output::printProductionRule(36);}
+                | Exp ADD Exp                                                       {output::printProductionRule(36);
+                                                                                     $$ = new Add($1,$3)}
                 | Exp MUL Exp                                                       {output::printProductionRule(36);}
                 | ID                                                                {output::printProductionRule(37);}
                 | Call                                                              {output::printProductionRule(38);}
-                | NUM                                                               {output::printProductionRule(39);}
+                | NUM                                                               {output::printProductionRule(39);
+                                                                                     $$ = new Exp($1->value, "int");}
                 | NUM B                                                             {output::printProductionRule(40);}
                 | STRING                                                            {output::printProductionRule(41);}
                 | TRUE                                                              {output::printProductionRule(42);}

@@ -2,9 +2,8 @@
 
 /* Declarations section */
 #include <stdio.h>
-#define YYSTYPE int
+#include "source.hpp"
 #include "parser.tab.hpp"
-#include "output.hpp"
 %}
 
 %option yylineno
@@ -54,8 +53,9 @@ continue                                return CONTINUE;
 \+|\-                                   return ADD;
 \*|\/                                   return MUL;
 override                                return OVERRIDE;
-0|[1-9]{digit}*                         return NUM;
+0|[1-9]{digit}*                         yylval=new Node(yytext); return NUM;
 {letter}({letter}|{digit})*             return ID;
 \/\/{incomment}*[\r|\n|\r\n]?           ;
 .                                       output::errorLex(yylineno); exit(0);
+
 %%

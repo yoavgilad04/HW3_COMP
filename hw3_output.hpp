@@ -3,6 +3,7 @@
 
 #include <vector>
 #include <string>
+#include <iostream>
 using namespace std;
 
 namespace output{
@@ -28,6 +29,13 @@ namespace output{
     void errorFuncNoOverride(int lineno, const string& id);
     void errorOverrideWithoutDeclaration(int lineno, const string& id);
     void errorAmbiguousCall(int lineno, const string& id);
+    void errorMainOverride(int yylineno);
+
+    // TODO: DELETE
+    extern const std::string rules[];
+    void printProductionRule(const int ruleno);
 }
+
+
 
 #endif
