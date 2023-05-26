@@ -3,10 +3,10 @@
 //
 #include "symbol_table.hpp"
 
-void SymbolTable::insert(Symbol* s)
+void SymbolTable::insert(string name, string type)
 {
+    Symbol* s = new Symbol(name, type, this->next_offset);
     this->map.insert(pair<string, Symbol*>(s->getName(), s));
-    s->setOffset(this->next_offset);
     this->next_offset++;
 }
 
@@ -33,12 +33,22 @@ Symbol* SymbolTable::getSymbolByName(string name)
     return this->map.find(name)->second;
 }
 
+Symbol* SymbolTable::getSymbolByOffset(int offset)
+{
+    for (std::multimap<string,Symbol*>::iterator it = this->map.begin(); it != this->map.end();++it)
+    {
+        if (it->second->getOffset() == offset)
+            return it->second;
+    }
+    return nullptr;
+}
+
 bool SymbolTable::isEmpty()
 {
     return this->map.empty();
 }
 
-~SymbolTable::SymbolTable()
+SymbolTable::~SymbolTable()
 {
     for (std::multimap<string,Symbol*>::iterator it = this->map.begin(); it != this->map.end();++it)
     {

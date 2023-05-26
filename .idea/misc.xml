@@ -20,20 +20,20 @@
           <option name="fileUrl" value="file://$PROJECT_DIR$/symbol.hpp" />
         </OpenedFileInfo>
         <OpenedFileInfo>
-          <option name="caretOffset" value="335" />
+          <option name="caretOffset" value="501" />
           <option name="fileUrl" value="file://$PROJECT_DIR$/symbol_table.hpp" />
         </OpenedFileInfo>
         <OpenedFileInfo>
-          <option name="caretOffset" value="104" />
-          <option name="fileUrl" value="file://$PROJECT_DIR$/main.cpp" />
+          <option name="caretOffset" value="1037" />
+          <option name="fileUrl" value="file://$PROJECT_DIR$/symbol_table.cpp" />
         </OpenedFileInfo>
         <OpenedFileInfo>
           <option name="caretOffset" value="238" />
           <option name="fileUrl" value="file://$PROJECT_DIR$/Makefile" />
         </OpenedFileInfo>
         <OpenedFileInfo>
-          <option name="caretOffset" value="426" />
-          <option name="fileUrl" value="file://$PROJECT_DIR$/symbol_table.cpp" />
+          <option name="caretOffset" value="2" />
+          <option name="fileUrl" value="file://$PROJECT_DIR$/main.cpp" />
         </OpenedFileInfo>
       </list>
     </option>

@@ -14,10 +14,11 @@ class SymbolTable
     int next_offset;
 public:
     SymbolTable(int next_offset=0):map(), next_offset(next_offset){}
-    void insert(Symbol* s);
+    void insert(string name, string type);
     void popBySymbol(Symbol* s);
     void popByOffset(int offset);
     Symbol* getSymbolByName(string name);
+    Symbol* getSymbolByOffset(int offset);
     bool isEmpty();
     friend ostream& operator<<(ostream& os, const SymbolTable& t)
     {

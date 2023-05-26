@@ -7,12 +7,15 @@
 
 int main()
 {
-    Symbol* a = new Symbol("a", "int");
-    Symbol* b = new Symbol("b", "string");
-    Symbol* c = new Symbol("c", "float");
     SymbolTable t;
-    t.insert(a);
-    t.insert(b);
-    t.insert(c);
+    std::cout << t.isEmpty() << std::endl;
+    t.insert("a", "int");
+    t.insert("b", "string");
+    t.insert("c", "float");
+    t.insert("c", "int");
+    std::cout << t.isEmpty() << std::endl;
     std::cout << t;
+    t.popByOffset(1);
+    std::cout << "After popByOffset:" << std::endl << t;
+    std::cout << "GetByOffset: " << *t.getSymbolByOffset(2);
 }
