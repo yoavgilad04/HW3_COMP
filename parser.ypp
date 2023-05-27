@@ -112,11 +112,11 @@ ExpList:        Exp                                                             
                                                                                      $$ = new ExpList(*$1, $3);}
 ;
 Type:           INT                                                                 {output::printProductionRule(32);
-                                                                                     $$ = $1;}
+                                                                                     $$ = new Node("INT");}
                 | BYTE                                                              {output::printProductionRule(33);
-                                                                                     $$ = $1;}
+                                                                                     $$ = new Node("BYTE");}
                 | BOOL                                                              {output::printProductionRule(34);
-                                                                                     $$ = $1;}
+                                                                                     $$ = new Node ("BOOL");}
 ;
 Exp:            LPAREN Exp RPAREN                                                   {output::printProductionRule(35);
                                                                                      $$ = $2;}
