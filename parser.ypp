@@ -56,19 +56,28 @@ Funcs:          epsilon                                                         
 ;
 
 M: epsilon                                                                           {table_stack.openNewScope();}
+X: OverRide RetType ID LPAREN Formals                                                {table_stack.addFuncSymbol($3->getType(), $2->getType(), $5->getType(), $1->getType());}
 ;
-FuncDecl:       OverRide RetType ID LPAREN Formals RPAREN LBRACE Statements RBRACE  {output::printProductionRule(4);};
-OverRide:       epsilon                                                             {output::printProductionRule(5);}
-                | OVERRIDE                                                          {output::printProductionRule(6);}
-;
+FuncDecl:  X RPAREN LBRACE M Statements RBRACE                                      {output::printProductionRule(4);
+                                                                                     table_stack.closeScope();
+                                                                                     };
+OverRide:       epsilon                                                             {output::printProductionRule(5);
+                                                                                     $$ = new Node();}
+                | OVERRIDE                                                          {output::printProductionRule(6);
+                                                                                     $$ = new Node("override");}
+                                                                                     ;
 RetType:        Type                                                                {output::printProductionRule(7);}
                 | VOID                                                              {output::printProductionRule(8);}
 ;
-Formals:        epsilon                                                             {output::printProductionRule(9);}
-                | FormalsList                                                       {output::printProductionRule(10);}
+Formals:        epsilon                                                             {output::printProductionRule(9);
+                                                                                     $$ = new FormalList();}
+                | FormalsList                                                       {output::printProductionRule(10);
+                                                                                      $$ = new FormalList(*$1);}
 ;
-FormalsList:    FormalDecl                                                          {output::printProductionRule(11);}
-                | FormalDecl COMMA FormalsList                                      {output::printProductionRule(12);}
+FormalsList:    FormalDecl                                                          {output::printProductionRule(11);
+                                                                                     $$ = new FormalList(*$1);}
+                | FormalDecl COMMA FormalsList                                      {output::printProductionRule(12);
+                                                                                      $$ = new FormalList(*$1, *$3);}
 ;
 FormalDecl:     Type ID                                                             {output::printProductionRule(13);
                                                                                      table_stack.addSymbolToLastTable($2->getType(), $1->getType());}
@@ -76,11 +85,13 @@ FormalDecl:     Type ID                                                         
 Statements:     Statement                                                           {output::printProductionRule(14);}
                 | Statements Statement                                              {output::printProductionRule(15);}
 ;
-Statement:      LBRACE Statements RBRACE                                            {output::printProductionRule(16);}
+Statement:      LBRACE M Statements RBRACE                                            {output::printProductionRule(16);
+                                                                                       table_stack.closeScope();};
                 | Type ID SC                                                        {output::printProductionRule(17);}
                 | Type ID ASSIGN Exp SC                                             {output::printProductionRule(18);
                                                                                     table_stack.addSymbolToLastTable($2->getType(), $1->getType());}
                 | ID ASSIGN Exp SC                                                  {output::printProductionRule(19);}
+                                                                                     // compare id.type and exp.type}
                 | Call SC                                                           {output::printProductionRule(20);}
                 | RETURN SC                                                         {output::printProductionRule(21);}
                 | RETURN Exp SC                                                     {output::printProductionRule(22);}

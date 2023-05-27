@@ -8,6 +8,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <ctype.h>
+#include <vector>
 
 extern int yylineno;
 using namespace std;
@@ -38,4 +39,17 @@ public:
     }
 };
 
+class FormalList : public Node
+{
+public:
+    FormalList():Node(){}
+    FormalList(Node& formal): Node(formal) {}
+    FormalList(Node& formal, Node& old_list)
+    {
+        string formal_list = formal.getType() + "," + old_list.getType();
+        //todo: delete pre nodes
+        this->type = formal_list;
+    }
+
+};
 #endif

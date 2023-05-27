@@ -7,7 +7,6 @@
 #include "symbol.hpp"
 #include <bits/stdc++.h>
 using namespace std;
-
 class SymbolTable
 {
     multimap<string, Symbol*> map;
@@ -15,6 +14,7 @@ class SymbolTable
 public:
     SymbolTable(int next_offset=0):map(), next_offset(next_offset){}
     void insert(string name, string type);
+    void insertFunc(string name, string type, vector<string> input_args, bool is_override);
     void popBySymbol(Symbol* s);
     void popByOffset(int offset);
     Symbol* getSymbolByName(string name);

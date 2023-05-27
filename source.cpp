@@ -41,12 +41,12 @@ Exp::Exp(string type) : Node(type) {}
 
 Exp::Exp(Node& exp_1, string operation_val, Node& exp_2)
 {
-    cout << "e1: " << exp_1.type << " e2: " << exp_2.type << endl;
-    if ((exp_1.type == "int" || exp_1.type == "byte") && (exp_2.type == "int" || exp_2.type == "byte"))
+//    cout << "e1: " << exp_1.getType() << " e2: " << exp_2.getType() << endl;
+    if ((exp_1.getType() == "int" || exp_1.getType() == "byte") && (exp_2.getType() == "int" || exp_2.getType() == "byte"))
     {
         if (operation_val == "binop")
         {
-            if(exp_1.type == "int" || exp_2.type == "int")
+            if(exp_1.getType() == "int" || exp_2.getType() == "int")
                 this->type = "int";
             else
                 this->type = "byte";
@@ -57,25 +57,25 @@ Exp::Exp(Node& exp_1, string operation_val, Node& exp_2)
             this->type = "bool";
             return;
         }
-        output::errorMismatch(yylineno);
-        exit(0);
+//        output::errorMismatch(yylineno);
+   //     exit(0);
     }
-    if (exp_1.type == "bool" && exp_2.type == "bool"){
+    if (exp_1.getType() == "bool" && exp_2.getType() == "bool"){
         if (operation_val == "bool_op"){
             this->type = "bool";
             return;
         }
     }
-    output::errorMismatch(yylineno);
-    exit(0);
+//    output::errorMismatch(yylineno);
+//    exit(0);
 }
 
 Exp::Exp(Node &exp, const string &conversion_type)
 {
-    cout << "third exp " << exp.type << "," << conversion_type << endl;
+//    cout << "third exp " << exp.getType() << "," << conversion_type << endl;
     if (conversion_type == "not")
     {
-        if (exp.type == "bool")
+        if (exp.getType() == "bool")
         {
             this->type = "bool";
             return;
@@ -85,10 +85,10 @@ Exp::Exp(Node &exp, const string &conversion_type)
     }
     if (conversion_type == "int" || conversion_type == "byte")
     {
-        if (exp.type == "int" || exp.type == "byte")
+        if (exp.getType() == "int" || exp.getType() == "byte")
         {
             if (conversion_type == "int")
-                this->type = "int";
+                this->getType() = "int";
             else // conversion type == "byte"
                 this->type = "byte";
             return;
@@ -97,7 +97,7 @@ Exp::Exp(Node &exp, const string &conversion_type)
         exit(0);
     }
     assert(conversion_type == "bool");
-    if (exp.type == "bool")
+    if (exp.getType() == "bool")
     {
         this->type = "bool";
         return;
@@ -106,14 +106,14 @@ Exp::Exp(Node &exp, const string &conversion_type)
     exit(0);
 }
 
-Exp::Exp(Node &n): Node("int")
+Exp::Exp(Node &n): Node(n.getType())
 {
-    if (isInt(n.type))
+    if (isInt(n.getType()))
     {
-        int real_val = stoi(n.type);
+        int real_val = stoi(n.getType());
         if (real_val > 255 || real_val < 0)
         {
-            output::errorByteTooLarge(yylineno, n.type);
+            output::errorByteTooLarge(yylineno, n.getType());
             exit(0);
         }
         this->type = "byte";
@@ -122,10 +122,10 @@ Exp::Exp(Node &n): Node("int")
     {
         cout << "Shaked Shtok, yoav will search for ID" << endl;
         //handle ID
-        Symbol* t = table_stack.searchForSymbol(n.type); // in this case type will be the name of the id
+        Symbol* t = table_stack.searchForSymbol(n.getType()); // in this case type will be the name of the id
         if (t == nullptr)
         {
-            output::errorUndef(yylineno, n.type);
+            output::errorUndef(yylineno, n.getType());
         }
         this->type = t->getType();
     }

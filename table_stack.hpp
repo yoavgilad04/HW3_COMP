@@ -19,6 +19,7 @@ public:
     void openNewScope();
     void closeScope();
     void addSymbolToLastTable(string name, string type);
+    void addFuncSymbol(string name, string type, string args, string is_override);
     Symbol* searchForSymbol(string name);
     ~TableStack();
 };

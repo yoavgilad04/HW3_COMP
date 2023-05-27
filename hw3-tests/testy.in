@@ -1,6 +1,14 @@
-void doSomething()
+void doSomething(int x, bool y, bool z)
 {
-    int x = 2 + 4;
-    int y = 3 + 2;
-    int z = x + y;
+    return;
+}
+
+int doSomething(int x, bool y, bool z)
+{
+    return;
+}
+
+int main()
+{
+    doSomething(1,2,true);
 }
