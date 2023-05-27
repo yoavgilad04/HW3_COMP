@@ -8,7 +8,6 @@ using namespace std;
 extern int yylex();
 void yyerror(const char*);
 extern TableStack table_stack;
-
 %}
 
 %nonassoc STRING;
@@ -55,19 +54,20 @@ Funcs:          epsilon                                                         
                 | FuncDecl Funcs                                                    {output::printProductionRule(3);}
 ;
 
-M: epsilon                                                                           {table_stack.openNewScope();}
-X: OverRide RetType ID LPAREN Formals                                                {table_stack.addFuncSymbol($3->getType(), $2->getType(), $5->getType(), $1->getType());}
-;
+M: epsilon                                                                           {table_stack.openNewScope();};
+X: OverRide RetType ID LPAREN Formals                                                {table_stack.addFuncSymbol($3->getType(), $2->getType(), $5->getType(), $1->getType());};
 FuncDecl:  X RPAREN LBRACE M Statements RBRACE                                      {output::printProductionRule(4);
-                                                                                     table_stack.closeScope();
-                                                                                     };
+                                                                                     table_stack.closeScope();}
+;
 OverRide:       epsilon                                                             {output::printProductionRule(5);
                                                                                      $$ = new Node();}
                 | OVERRIDE                                                          {output::printProductionRule(6);
-                                                                                     $$ = new Node("override");}
-                                                                                     ;
-RetType:        Type                                                                {output::printProductionRule(7);}
-                | VOID                                                              {output::printProductionRule(8);}
+                                                                                     $$ = new Node("OVERRIDE");}
+;
+RetType:        Type                                                                {output::printProductionRule(7);
+                                                                                     $$ = $1;}
+                | VOID                                                              {output::printProductionRule(8);
+                                                                                     $$ = $1;}
 ;
 Formals:        epsilon                                                             {output::printProductionRule(9);
                                                                                      $$ = new FormalList();}
@@ -101,11 +101,15 @@ Statement:      LBRACE M Statements RBRACE                                      
                 | BREAK SC                                                          {output::printProductionRule(26);}
                 | CONTINUE SC                                                       {output::printProductionRule(27);}
 ;
-Call:           ID LPAREN ExpList RPAREN                                            {output::printProductionRule(28);}
-                | ID LPAREN RPAREN                                                  {output::printProductionRule(29);}
+Call:           ID LPAREN ExpList RPAREN                                            {output::printProductionRule(28);
+                                                                                     $$ = new Call(*$1, $3);}
+                | ID LPAREN RPAREN                                                  {output::printProductionRule(29);
+                                                                                     $$ = new Call(*$1);}
 ;
-ExpList:        Exp                                                                 {output::printProductionRule(30);}
-                | Exp COMMA ExpList                                                 {output::printProductionRule(31);}
+ExpList:        Exp                                                                 {output::printProductionRule(30);
+                                                                                     $$ = new ExpList(*$1);}
+                | Exp COMMA ExpList                                                 {output::printProductionRule(31);
+                                                                                     $$ = new ExpList(*$1, $3);}
 ;
 Type:           INT                                                                 {output::printProductionRule(32);
                                                                                      $$ = $1;}
@@ -121,19 +125,19 @@ Exp:            LPAREN Exp RPAREN                                               
                 | Exp MUL Exp                                                       {output::printProductionRule(36);
                                                                                      $$ = new Exp(*$1, "binop", *$3);}
                 | ID                                                                {output::printProductionRule(37);
-                                                                                     $$ = new Exp(*$1);}
-                | Call                                                              {output::printProductionRule(38);}
-
+                                                                                     $$ = new Exp(*$1, "id");}
+                | Call                                                              {output::printProductionRule(38);
+                                                                                     $$ = new Exp(*$1, "call");}
                 | NUM                                                               {output::printProductionRule(39);
-                                                                                      $$ = new Exp("int");}
+                                                                                      $$ = new Exp("INT");}
                 | NUM B                                                             {output::printProductionRule(40);
                                                                                      $$ = new Exp(*$1);}
                 | STRING                                                            {output::printProductionRule(41);
-                                                                                     $$ = new Exp("string");}
+                                                                                     $$ = new Exp("STRING");}
                 | TRUE                                                              {output::printProductionRule(42);
-                                                                                     $$ = new Exp("bool");}
+                                                                                     $$ = new Exp("BOOL");}
                 | FALSE                                                             {output::printProductionRule(43);
-                                                                                     $$ = new Exp("bool");}
+                                                                                     $$ = new Exp("BOOL");}
                 | NOT Exp                                                           {output::printProductionRule(44);
                                                                                      $$ = new Exp(*$2, "not");}
                 | Exp AND Exp                                                       {output::printProductionRule(45);
@@ -146,6 +150,7 @@ Exp:            LPAREN Exp RPAREN                                               
                                                                                      $$ = new Exp(*$1, "relop", *$3);}
                 | LPAREN Type RPAREN Exp                                            {output::printProductionRule(48);
                                                                                      $$ = new Exp(*$4, $2->getType());}
+;
 epsilon:        %empty;
 
 %%
@@ -160,4 +165,3 @@ int main()
 {
 	return yyparse();
 }
-

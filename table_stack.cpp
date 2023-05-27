@@ -18,9 +18,15 @@ void TableStack::addFuncSymbol(string name, string type, string args, string is_
 {
     if (this->tables.empty())
         throw std::invalid_argument("Trying to add element when there are no scopes in stack");
+//    if (name == "main")
+//    {
+//        Symbol* potential_main = searchForSymbol(name);
+//        if (potential_main != nullptr)
+//        {;}
+//    }
     vector<string> input_args = splitString(args);
     bool is_over = false;
-    if (is_override == "override")
+    if (is_override == "OVERRIDE")
         is_over = true;
     this->tables[this->tables.size()-1]->insertFunc(name, type, input_args, is_over);
     cout << "<";
@@ -42,11 +48,15 @@ void TableStack::openNewScope()
 {
     int new_offset;
     if (this->tables.empty())
+    {
         new_offset = 0;
+    }
     else
         new_offset = this->tables[this->tables.size() - 1]->getSymbolTableOffset();
     SymbolTable* t = new SymbolTable(new_offset);
     this->tables.push_back(t);
+    addFuncSymbol("print", "VOID", "STRING", "default");
+    addFuncSymbol("printi", "VOID", "INT", "default"); //TODO: check if it's ok printi *implicitly* converts byte to int
     cout << "scope opened!" << endl;
 }
 
@@ -56,8 +66,9 @@ void TableStack::closeScope()
         throw std::invalid_argument("Trying to close scope when there are no scopes in stack");
     SymbolTable* t_to_delete = this->tables[this->tables.size()-1];
     this->tables.pop_back();
+    output::endScope();
     delete t_to_delete;
-    cout << "Scope closed!" << endl;
+//    cout << "Scope closed!" << endl;
 }
 
 
@@ -77,7 +88,7 @@ Symbol* TableStack::searchForSymbol(string name)
 TableStack::~TableStack()
 {
     if (this->tables.size() != 1)
-        cout <<"More then one Scope when deleteing tableStack";
+        cout <<"ERROR: More then one Scope when deleteing tableStack";
     for(int i=0; i<this->tables.size(); i++)
     {
         delete this->tables[i];

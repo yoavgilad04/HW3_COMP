@@ -42,27 +42,27 @@ Exp::Exp(string type) : Node(type) {}
 Exp::Exp(Node& exp_1, string operation_val, Node& exp_2)
 {
 //    cout << "e1: " << exp_1.getType() << " e2: " << exp_2.getType() << endl;
-    if ((exp_1.getType() == "int" || exp_1.getType() == "byte") && (exp_2.getType() == "int" || exp_2.getType() == "byte"))
+    if ((exp_1.getType() == "INT" || exp_1.getType() == "BYTE") && (exp_2.getType() == "INT" || exp_2.getType() == "BYTE"))
     {
         if (operation_val == "binop")
         {
-            if(exp_1.getType() == "int" || exp_2.getType() == "int")
-                this->type = "int";
+            if(exp_1.getType() == "INT" || exp_2.getType() == "INT")
+                this->type = "INT";
             else
-                this->type = "byte";
+                this->type = "BYTE";
             return;
         }
         if (operation_val == "relop")
         {
-            this->type = "bool";
+            this->type = "BOOL";
             return;
         }
 //        output::errorMismatch(yylineno);
    //     exit(0);
     }
-    if (exp_1.getType() == "bool" && exp_2.getType() == "bool"){
+    if (exp_1.getType() == "BOOL" && exp_2.getType() == "BOOL"){
         if (operation_val == "bool_op"){
-            this->type = "bool";
+            this->type = "BOOL";
             return;
         }
     }
@@ -75,35 +75,52 @@ Exp::Exp(Node &exp, const string &conversion_type)
 //    cout << "third exp " << exp.getType() << "," << conversion_type << endl;
     if (conversion_type == "not")
     {
-        if (exp.getType() == "bool")
+        if (exp.getType() == "BOOL")
         {
-            this->type = "bool";
+            this->type = "BOOL";
             return;
         }
         output::errorMismatch(yylineno);
         exit(0);
     }
-    if (conversion_type == "int" || conversion_type == "byte")
+    if (conversion_type == "INT" || conversion_type == "BYTE")
     {
-        if (exp.getType() == "int" || exp.getType() == "byte")
+        if (exp.getType() == "INT" || exp.getType() == "BYTE")
         {
-            if (conversion_type == "int")
-                this->getType() = "int";
-            else // conversion type == "byte"
-                this->type = "byte";
+            if (conversion_type == "INT")
+                this->getType() = "INT";
+            else // conversion type == "BYTE"
+                this->type = "BYTE";
             return;
         }
         output::errorMismatch(yylineno);
         exit(0);
     }
-    assert(conversion_type == "bool");
-    if (exp.getType() == "bool")
+    assert(conversion_type == "BOOL");
+    if(conversion_type == "BOOL")
     {
-        this->type = "bool";
+        if (exp.getType() == "BOOL")
+        {
+            this->type = "BOOL";
+            return;
+        }
+        output::errorMismatch(yylineno);
+        exit(0);
+    }
+    if(conversion_type == "id")
+    {
+        cout << "Shaked Shtok, yoav will search for ID" << endl;
+        //handle ID
+        Symbol* t = table_stack.searchForSymbol(exp.getType()); // in this case type will be the name of the id
+        if (t == nullptr)
+        {
+            output::errorUndef(yylineno, exp.getType());
+        }
+        this->type = t->getType();
         return;
     }
-    output::errorMismatch(yylineno);
-    exit(0);
+    assert(conversion_type == "call");
+    this->type = exp.getType();
 }
 
 Exp::Exp(Node &n): Node(n.getType())
@@ -116,18 +133,24 @@ Exp::Exp(Node &n): Node(n.getType())
             output::errorByteTooLarge(yylineno, n.getType());
             exit(0);
         }
-        this->type = "byte";
+        this->type = "BYTE";
     }
-    else
+    assert(true==false); //must not get here
+}
+
+Call::Call(Node &function_name) {
+    cout << function_name.getType() << endl;
+}
+
+Call::Call(Node &function_name, Node* exp_list) {
+    ExpList* expList = dynamic_cast<ExpList*>(exp_list);
+    vector<string>* true_exp_list = expList->getExpList();
+    cout << "======" << endl;
+    for(auto e : *true_exp_list)
     {
-        cout << "Shaked Shtok, yoav will search for ID" << endl;
-        //handle ID
-        Symbol* t = table_stack.searchForSymbol(n.getType()); // in this case type will be the name of the id
-        if (t == nullptr)
-        {
-            output::errorUndef(yylineno, n.getType());
-        }
-        this->type = t->getType();
+        cout << e << ' ';
     }
+    cout << endl;
+    cout << "======" << endl;
 }
 

@@ -20,10 +20,10 @@ protected:
 public:
     Node(string type="Default"): type(type){};
     string getType(){return this->type;}
+    virtual ~Node() = default;
 };
 
 #define YYSTYPE Node*
-
 
 class Exp : public Node
 {
@@ -52,4 +52,36 @@ public:
     }
 
 };
+
+class ExpList : public Node
+{
+    vector<string> exp_list;
+public:
+    ExpList(Node& exp)
+    {
+            this->exp_list.insert(this->exp_list.begin(), exp.getType());
+    }
+    ExpList(Node& exp, Node* exp_list){
+        ExpList* old_exp_list = dynamic_cast<ExpList*>(exp_list);
+        this->exp_list = *(old_exp_list->getExpList());
+        delete old_exp_list;
+        this->exp_list.insert(this->exp_list.begin(),exp.getType());
+    }
+    void insert(Exp& exp)
+    {
+        this->exp_list.insert(this->exp_list.begin(),exp.getType());
+    }
+    vector<string>* getExpList()
+    {
+        return &(this->exp_list);
+    }
+};
+
+class Call : public Node
+{
+public:
+    Call(Node& function_name, Node* exp_list); //TODO: integrate with Yoav's tables
+    Call(Node& function_name); //TODO: integrate with Yoav's tables
+};
+
 #endif

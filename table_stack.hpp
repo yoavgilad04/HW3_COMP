@@ -7,6 +7,7 @@
 #include <string>
 #include <iostream>
 #include "symbol_table.hpp"
+#include "hw3_output.hpp"
 #include <stdio.h>
 #include <stdlib.h>
 

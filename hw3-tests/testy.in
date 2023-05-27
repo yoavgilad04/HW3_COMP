@@ -3,12 +3,12 @@ void doSomething(int x, bool y, bool z)
     return;
 }
 
-int doSomething(int x, bool y, bool z)
-{
-    return;
-}
+//int doSomething(int x, bool y, bool z)
+//{
+//    return;
+//}
 
-int main()
-{
-    doSomething(1,2,true);
-}
+//int main()
+//{
+//    doSomething(1,2,true);
+//}
