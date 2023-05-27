@@ -7,7 +7,6 @@
 using namespace std;
 extern int yylex();
 void yyerror(const char*);
-extern stack <SymbolTable*> sts;
 %}
 
 %nonassoc STRING;
@@ -50,8 +49,7 @@ extern stack <SymbolTable*> sts;
 %%
 
 Program:        M Funcs                                                             {output::printProductionRule(1);};
-M:              epsilon                                                             {SymbolTable* st = new SymbolTable();
-                                                                                     sts.push(st};}
+M:              epsilon                                                             {;}
 Funcs:          epsilon                                                             {output::printProductionRule(2);}
                 | FuncDecl Funcs                                                    {output::printProductionRule(3);}
 ;
@@ -74,11 +72,8 @@ Statements:     Statement                                                       
                 | Statements Statement                                              {output::printProductionRule(15);}
 ;
 Statement:      LBRACE Statements RBRACE                                            {output::printProductionRule(16);}
-                | Type ID SC                                                        {output::printProductionRule(17);
-                                                                                     current_st.insert($2->value, $1->value)}
-                | Type ID ASSIGN Exp SC                                             {output::printProductionRule(18);
-                                                                                     current_st = sts.top();
-                                                                                     current_st.insert($2->value, $1->value, $4->value)}
+                | Type ID SC                                                        {output::printProductionRule(17);}
+                | Type ID ASSIGN Exp SC                                             {output::printProductionRule(18);}
                 | ID ASSIGN Exp SC                                                  {output::printProductionRule(19);}
                 | Call SC                                                           {output::printProductionRule(20);}
                 | RETURN SC                                                         {output::printProductionRule(21);}

@@ -7,7 +7,7 @@
 #include "hw3_output.hpp"
 #include "symbol_table.hpp"
 
-stack <SymbolTable*> sts;
+//stack <SymbolTable*> sts;
 
 extern int yylineno;
 using namespace std;
@@ -39,6 +39,7 @@ public:
         if (type == "id")
         {
             //TODO: yoav
+            this->value = "int";
             return;
         }
         if (type == "byte")
@@ -121,7 +122,6 @@ public:
         output::errorMismatch(yylineno);
         exit(0);
     }
-
 };
 
 
