@@ -52,6 +52,7 @@ void output::errorSyn(int lineno){
 
 void output::errorUndef(int lineno, const string& id){
     cout << "line " << lineno << ":" << " variable " << id << " is not defined" << endl;
+    exit(0);
 }
 
 void output::errorDef(int lineno, const string& id){

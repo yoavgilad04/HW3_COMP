@@ -1,0 +1,6 @@
+void doSomething()
+{
+    int x = 2 + 4;
+    int y = 3 + 2;
+    int z = x + y;
+}

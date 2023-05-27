@@ -18,7 +18,7 @@ class Symbol
     bool isFunc;
 
 public:
-    Symbol(string name, string type, int offset=0, bool isFunc=false):
+    Symbol(string name, string type,  int offset=0, bool isFunc=false):
     name(name), type(type), offset(offset), isFunc(isFunc){}
     int getOffset() const {return this->offset;}
     string getName() const {return this->name;}

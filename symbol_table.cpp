@@ -8,6 +8,7 @@ void SymbolTable::insert(string name, string type)
     Symbol* s = new Symbol(name, type, this->next_offset);
     this->map.insert(pair<string, Symbol*>(s->getName(), s));
     this->next_offset++;
+    cout << *this;
 }
 
 void SymbolTable::popBySymbol(Symbol* s)
@@ -30,6 +31,9 @@ void SymbolTable::popByOffset(int offset)
 
 Symbol* SymbolTable::getSymbolByName(string name)
 {
+    std::multimap<string, Symbol*>::iterator it = this->map.find(name);
+    if (it == this->map.end())
+        return nullptr;
     return this->map.find(name)->second;
 }
 

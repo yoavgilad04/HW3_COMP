@@ -20,15 +20,20 @@ public:
     Symbol* getSymbolByName(string name);
     Symbol* getSymbolByOffset(int offset);
     bool isEmpty();
+    int getSymbolTableOffset(){return this->next_offset;}
+    ~SymbolTable();
+
+
     friend ostream& operator<<(ostream& os, const SymbolTable& t)
     {
+        os << "{";
         for (std::multimap<string,Symbol*>::const_iterator it = t.map.begin(); it != t.map.end(); ++it)
         {
-            os << "{" << it->first << ": " << *(it->second) << "}" << endl;
+            os << it->first << ": " << *(it->second) << ", ";
         }
+        os << "}" << endl;
         return os;
     }
-    ~SymbolTable();
 };
 
 //ostream& operator<<(ostream& os, const SymbolTable& t)
