@@ -12,7 +12,7 @@
           <option name="fileUrl" value="file://$PROJECT_DIR$/hw3_output.cpp" />
         </OpenedFileInfo>
         <OpenedFileInfo>
-          <option name="caretOffset" value="110" />
+          <option name="caretOffset" value="331" />
           <option name="fileUrl" value="file://$PROJECT_DIR$/global_funcs.hpp" />
         </OpenedFileInfo>
         <OpenedFileInfo>
@@ -20,11 +20,11 @@
           <option name="fileUrl" value="file://$PROJECT_DIR$/global_funcs.cpp" />
         </OpenedFileInfo>
         <OpenedFileInfo>
-          <option name="caretOffset" value="1200" />
+          <option name="caretOffset" value="7702" />
           <option name="fileUrl" value="file://$PROJECT_DIR$/parser.ypp" />
         </OpenedFileInfo>
         <OpenedFileInfo>
-          <option name="caretOffset" value="612" />
+          <option name="caretOffset" value="534" />
           <option name="fileUrl" value="file://$PROJECT_DIR$/source.hpp" />
         </OpenedFileInfo>
         <OpenedFileInfo>
@@ -36,11 +36,7 @@
           <option name="fileUrl" value="file://$PROJECT_DIR$/symbol_table.cpp" />
         </OpenedFileInfo>
         <OpenedFileInfo>
-          <option name="caretOffset" value="46350" />
-          <option name="fileUrl" value="file://$PROJECT_DIR$/parser.tab.cpp" />
-        </OpenedFileInfo>
-        <OpenedFileInfo>
-          <option name="caretOffset" value="1714" />
+          <option name="caretOffset" value="1063" />
           <option name="fileUrl" value="file://$PROJECT_DIR$/source.cpp" />
         </OpenedFileInfo>
       </list>

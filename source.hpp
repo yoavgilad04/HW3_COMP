@@ -28,7 +28,7 @@ public:
     Exp(string type);
     Exp(Exp e1, string op , Exp e2);
     Exp(const Node& n);
-
+    Exp(const Node* exp, const string& conversion_type);
     friend ostream& operator<<(ostream& os, const Exp& e)
     {
         os << "Type: " << e.type;
