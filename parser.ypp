@@ -3,12 +3,11 @@
 #include "hw3_output.hpp"
 #include <iostream>
 #include <stdlib.h>
-#include "symbol_table.hpp"
-#include "global_funcs.hpp"
+#include "table_stack.hpp"
 using namespace std;
 extern int yylex();
 void yyerror(const char*);
-extern std::vector<SymbolTable*> tables;
+extern TableStack table_stack;
 
 %}
 
@@ -56,7 +55,7 @@ Funcs:          epsilon                                                         
                 | FuncDecl Funcs                                                    {output::printProductionRule(3);}
 ;
 
-M: epsilon                                                                           {global::openNewScope();}
+M: epsilon                                                                           {table_stack.openNewScope();}
 ;
 FuncDecl:       OverRide RetType ID LPAREN Formals RPAREN LBRACE Statements RBRACE  {output::printProductionRule(4);};
 OverRide:       epsilon                                                             {output::printProductionRule(5);}
@@ -72,7 +71,7 @@ FormalsList:    FormalDecl                                                      
                 | FormalDecl COMMA FormalsList                                      {output::printProductionRule(12);}
 ;
 FormalDecl:     Type ID                                                             {output::printProductionRule(13);
-                                                                                     global::addSymbolToLastTable($2->type, $1->type);}
+                                                                                     table_stack.addSymbolToLastTable($2->getType(), $1->getType());}
 ;
 Statements:     Statement                                                           {output::printProductionRule(14);}
                 | Statements Statement                                              {output::printProductionRule(15);}
@@ -80,7 +79,7 @@ Statements:     Statement                                                       
 Statement:      LBRACE Statements RBRACE                                            {output::printProductionRule(16);}
                 | Type ID SC                                                        {output::printProductionRule(17);}
                 | Type ID ASSIGN Exp SC                                             {output::printProductionRule(18);
-                                                                                    global::addSymbolToLastTable($2->type, $1->type);}
+                                                                                    table_stack.addSymbolToLastTable($2->getType(), $1->getType());}
                 | ID ASSIGN Exp SC                                                  {output::printProductionRule(19);}
                 | Call SC                                                           {output::printProductionRule(20);}
                 | RETURN SC                                                         {output::printProductionRule(21);}
@@ -97,35 +96,45 @@ Call:           ID LPAREN ExpList RPAREN                                        
 ExpList:        Exp                                                                 {output::printProductionRule(30);}
                 | Exp COMMA ExpList                                                 {output::printProductionRule(31);}
 ;
-Type:           INT                                                                 {output::printProductionRule(32);}
-                | BYTE                                                              {output::printProductionRule(33);}
-                | BOOL                                                              {output::printProductionRule(34);}
+Type:           INT                                                                 {output::printProductionRule(32);
+                                                                                     $$ = $1;}
+                | BYTE                                                              {output::printProductionRule(33);
+                                                                                     $$ = $1;}
+                | BOOL                                                              {output::printProductionRule(34);
+                                                                                     $$ = $1;}
 ;
-Exp:            LPAREN Exp RPAREN                                                   {output::printProductionRule(35);}
+Exp:            LPAREN Exp RPAREN                                                   {output::printProductionRule(35);
+                                                                                     $$ = $2;}
                 | Exp ADD Exp                                                       {output::printProductionRule(36);
-                                                                                    cout << "1: " << $1->type << " 2: " << $2->type << " 3: " << $3->type << std::endl;}
+                                                                                     $$ = new Exp(*$1, "binop",  *$3);}
                 | Exp MUL Exp                                                       {output::printProductionRule(36);
-                                                                                     $$ = new Exp(*($1), "*", *($3));}
-
+                                                                                     $$ = new Exp(*$1, "binop", *$3);}
                 | ID                                                                {output::printProductionRule(37);
-                                                                                     $$ = new Exp(*($1));}
+                                                                                     $$ = new Exp(*$1);}
                 | Call                                                              {output::printProductionRule(38);}
 
                 | NUM                                                               {output::printProductionRule(39);
-                                                                                      $$ = new Exp(*($1));}
+                                                                                      $$ = new Exp("int");}
                 | NUM B                                                             {output::printProductionRule(40);
-                                                                                     $$ = new Exp(*($1));}
+                                                                                     $$ = new Exp(*$1);}
                 | STRING                                                            {output::printProductionRule(41);
-                                                                                     $$ = new Exp(*($1));}
-                | TRUE                                                              {output::printProductionRule(42);}
-                | FALSE                                                             {output::printProductionRule(43);}
-                | NOT Exp                                                           {output::printProductionRule(44);}
-                | Exp AND Exp                                                       {output::printProductionRule(45);}
-                | Exp OR Exp                                                        {output::printProductionRule(46);}
-                | Exp RELOP Exp                                                     {output::printProductionRule(47);}
-                | Exp EQLOP Exp                                                     {output::printProductionRule(47);}
-                | LPAREN Type RPAREN Exp                                            {output::printProductionRule(48);}
-;
+                                                                                     $$ = new Exp("string");}
+                | TRUE                                                              {output::printProductionRule(42);
+                                                                                     $$ = new Exp("bool");}
+                | FALSE                                                             {output::printProductionRule(43);
+                                                                                     $$ = new Exp("bool");}
+                | NOT Exp                                                           {output::printProductionRule(44);
+                                                                                     $$ = new Exp(*$2, "not");}
+                | Exp AND Exp                                                       {output::printProductionRule(45);
+                                                                                     $$ = new Exp(*$1, "bool_op", *$3);}
+                | Exp OR Exp                                                        {output::printProductionRule(46);
+                                                                                     $$ = new Exp(*$1, "bool_op", *$3);}
+                | Exp RELOP Exp                                                     {output::printProductionRule(47);
+                                                                                     $$ = new Exp(*$1, "relop",  *$3);}
+                | Exp EQLOP Exp                                                     {output::printProductionRule(47);
+                                                                                     $$ = new Exp(*$1, "relop", *$3);}
+                | LPAREN Type RPAREN Exp                                            {output::printProductionRule(48);
+                                                                                     $$ = new Exp(*$4, $2->getType());}
 epsilon:        %empty;
 
 %%

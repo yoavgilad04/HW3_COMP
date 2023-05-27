@@ -34,7 +34,7 @@ Symbol* SymbolTable::getSymbolByName(string name)
     std::multimap<string, Symbol*>::iterator it = this->map.find(name);
     if (it == this->map.end())
         return nullptr;
-    return this->map.find(name)->second;
+    return this->map.find(name)->second; //(return the symbol pointe (x, symbol_x)
 }
 
 Symbol* SymbolTable::getSymbolByOffset(int offset)

@@ -3,7 +3,7 @@
 
 #include <string>
 #include <iostream>
-#include "symbol_table.hpp"
+#include "table_stack.hpp"
 #include "hw3_output.hpp"
 #include <stdio.h>
 #include <stdlib.h>
@@ -12,10 +12,13 @@
 extern int yylineno;
 using namespace std;
 
+
 class Node {
-public:
+protected:
     string type;
+public:
     Node(string type="Default"): type(type){};
+    string getType(){return this->type;}
 };
 
 #define YYSTYPE Node*
@@ -24,11 +27,10 @@ public:
 class Exp : public Node
 {
 public:
-    string type;
     Exp(string type);
-    Exp(Exp e1, string op , Exp e2);
-    Exp(const Node& n);
-    Exp(const Node* exp, const string& conversion_type);
+    Exp(Node& exp_1, string operation_val, Node& exp_2);
+    Exp(Node& n);
+    Exp(Node& exp, const string& conversion_type);
     friend ostream& operator<<(ostream& os, const Exp& e)
     {
         os << "Type: " << e.type;

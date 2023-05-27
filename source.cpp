@@ -2,13 +2,10 @@
 // Created by yoavgilad on 5/26/23.
 //
 #include "source.hpp"
-#include <stdio.h>
 #include <stdlib.h>
 #include <ctype.h>
-#include <vector>
 
-std::vector<SymbolTable *> tables;
-
+TableStack table_stack;
 
 bool isInt(const std::string &str) {
     try {
@@ -27,7 +24,7 @@ bool isString(const std::string &str) {
     return false;
 }
 
-bool isB(const std::string &str) {
+bool isByte(const std::string &str) {
     // Check if the string is empty
     if (str.empty())
         return false;
@@ -42,50 +39,35 @@ bool isB(const std::string &str) {
 
 Exp::Exp(string type) : Node(type) {}
 
-Exp::Exp(Exp e1, string op, Exp e2) : Node(e1.type)
+Exp::Exp(Node& exp_1, string operation_val, Node& exp_2)
 {
-    if ((exp_1.value == "int" || exp_1.value == "byte") && (exp_2.value == "int" || exp_2.value == "byte"))
+    cout << "e1: " << exp_1.type << " e2: " << exp_2.type << endl;
+    if ((exp_1.type == "int" || exp_1.type == "byte") && (exp_2.type == "int" || exp_2.type == "byte"))
     {
         if (operation_val == "binop")
         {
-            if(exp_1.value == "int" || exp_2.value == "int")
-                this->value = "int";
+            if(exp_1.type == "int" || exp_2.type == "int")
+                this->type = "int";
             else
-                this->value = "byte";
+                this->type = "byte";
             return;
         }
         if (operation_val == "relop")
         {
-            this->value = "bool";
+            this->type = "bool";
             return;
         }
         output::errorMismatch(yylineno);
         exit(0);
     }
-    if (exp_1.value == "bool" && exp_2.value == "bool"){
+    if (exp_1.type == "bool" && exp_2.type == "bool"){
         if (operation_val == "bool_op"){
-            this->value = "bool";
+            this->type = "bool";
             return;
         }
     }
     output::errorMismatch(yylineno);
     exit(0);
-//    if (e1.type == e2.type)
-//    {
-//        this->type = e1.type;
-//    }
-//    else
-//    {
-//        if (e1.type == "int" && e2.type == "byte")
-//        {
-//            this->type = "int";
-//        }
-//        else
-//        {
-//            output::errorMismatch(yylineno);
-//        }
-//    }
-//    cout << "Exp constructor with OP, " << *this << endl;
 }
 
 Exp::Exp(Node &exp, const string &conversion_type)
@@ -93,9 +75,9 @@ Exp::Exp(Node &exp, const string &conversion_type)
     cout << "third exp " << exp.type << "," << conversion_type << endl;
     if (conversion_type == "not")
     {
-        if (exp.value == "bool")
+        if (exp.type == "bool")
         {
-            this->value = "bool";
+            this->type = "bool";
             return;
         }
         output::errorMismatch(yylineno);
@@ -124,29 +106,28 @@ Exp::Exp(Node &exp, const string &conversion_type)
     exit(0);
 }
 
-Exp::Exp(const Node &n) : Node(n.type)
+Exp::Exp(Node &n): Node("int")
 {
     if (isInt(n.type))
     {
-        cout << "isInt: " << n.type << endl;
-        this->type = "int";
-    } else if (isB(n.type))
-    {
+        int real_val = stoi(n.type);
+        if (real_val > 255 || real_val < 0)
+        {
+            output::errorByteTooLarge(yylineno, n.type);
+            exit(0);
+        }
         this->type = "byte";
-    } else if (isString(n.type))
-    {
-        this->type = "string";
     }
     else
     {
-        //search for id in symbol tables
-        cout << "Inside Node Converter: " << n.type << endl;
-//        Symbol* s = (n.type); //in here type means the id(ex: "x", "var" ..)
-//        if (s == nullptr)
-//        {
-//            output::errorUndef(yylineno, n.type);
-//        }
-//        cout << "The symbol found is: " << s << endl;
-//        this->type = s->getType();
+        cout << "Shaked Shtok, yoav will search for ID" << endl;
+        //handle ID
+        Symbol* t = table_stack.searchForSymbol(n.type); // in this case type will be the name of the id
+        if (t == nullptr)
+        {
+            output::errorUndef(yylineno, n.type);
+        }
+        this->type = t->getType();
     }
 }
+
