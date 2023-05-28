@@ -25,7 +25,7 @@ incomment      ([^\x0a\x0d])
 <STR>({instring}|\\[nrt"\\])+           ;
 <STR>.                                  output::errorLex(yylineno); exit(0);
 {whitespace}				            ;
-void                                    yylval=new Node(yytext); return VOID;
+void                                    yylval=new Node("VOID"); return VOID;
 int                                     yylval=new Node(yytext); return INT;
 byte                                    yylval=new Node(yytext); return BYTE;
 bool                                    yylval=new Node(yytext); return BOOL;

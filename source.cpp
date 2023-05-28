@@ -6,6 +6,7 @@
 #include <ctype.h>
 
 TableStack table_stack;
+bool is_in_loop = false;
 
 bool isInt(const std::string &str) {
     try {
@@ -96,7 +97,7 @@ Exp::Exp(Node &exp, const string &conversion_type)
         output::errorMismatch(yylineno);
         exit(0);
     }
-    assert(conversion_type == "BOOL");
+//    assert(conversion_type == "BOOL");
     if(conversion_type == "BOOL")
     {
         if (exp.getType() == "BOOL")

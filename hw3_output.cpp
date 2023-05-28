@@ -65,6 +65,7 @@ void output::errorUndefFunc(int lineno, const string& id) {
 
 void output::errorMismatch(int lineno){
     cout << "line " << lineno << ":" << " type mismatch" << endl;
+    exit(0);
 }
 
 void output::errorPrototypeMismatch(int lineno, const string& id) {
@@ -73,14 +74,17 @@ void output::errorPrototypeMismatch(int lineno, const string& id) {
 
 void output::errorUnexpectedBreak(int lineno) {
     cout << "line " << lineno << ":" << " unexpected break statement" << endl;
+    exit(0);
 }
 
 void output::errorUnexpectedContinue(int lineno) {
-    cout << "line " << lineno << ":" << " unexpected continue statement" << endl;	
+    cout << "line " << lineno << ":" << " unexpected continue statement" << endl;
+    exit(0);
 }
 
 void output::errorMainMissing() {
     cout << "Program has no 'void main()' function" << endl;
+    exit(0);
 }
 
 void output::errorByteTooLarge(int lineno, const string& value) {
@@ -89,10 +93,12 @@ void output::errorByteTooLarge(int lineno, const string& value) {
 
 void output::errorFuncNoOverride(int lineno, const string& id) {
     cout << "line " << lineno << ": function " << id << " was declared before as non-override function" << endl;
+    exit(0);
 }
 
 void output::errorOverrideWithoutDeclaration(int lineno, const string& id) {
     cout << "line " << lineno << ": function " << id << " attempt to override a function without declaring the current function as override" << endl;
+    exit(0);
 }
 
 void output::errorAmbiguousCall(int lineno, const string& id) {

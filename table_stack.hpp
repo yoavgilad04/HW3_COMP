@@ -12,6 +12,9 @@
 #include <stdlib.h>
 
 using namespace std;
+
+extern int yylineno;
+
 class TableStack
 {
     std::vector<SymbolTable*> tables;
@@ -22,6 +25,10 @@ public:
     void addSymbolToLastTable(string name, string type);
     void addFuncSymbol(string name, string type, string args, string is_override);
     Symbol* searchForSymbol(string name);
+    void compareType(string id_name, string exp_type);
+    void printStack();
+    bool isFuncExist(string func_name);
+    FuncSymbol* searchForFuncSymbol(string func_name);
     ~TableStack();
 };
 

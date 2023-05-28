@@ -29,7 +29,10 @@ public:
         os << "{";
         for (std::multimap<string,Symbol*>::const_iterator it = t.map.begin(); it != t.map.end(); ++it)
         {
-            os << it->first << ": " << *(it->second) << ", ";
+            if (std::next(it) == t.map.end())
+                os << it->first << ": " << *(it->second);
+            else
+                os << it->first << ": " << *(it->second) << ", ";
         }
         os << "}" << endl;
         return os;

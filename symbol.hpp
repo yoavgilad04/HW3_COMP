@@ -28,9 +28,14 @@ public:
     string getName() const {return this->name;}
     string getType() const {return this->type;}
     void setOffset(int offset){this->offset = offset;}
+    virtual ostream& printSymbol(std::ostream& os) const
+    {
+        os << "(" << this->getName() << ", " << this->getType() << ", " << this->getOffset() << ")";
+        return os;
+    }
     friend ostream& operator<<(ostream& os, const Symbol& s)
     {
-        os << "(" << s.getName() << ", " << s.getType() << ", " << s.getOffset() << ")";
+        s.printSymbol(os);
         return os;
     }
 };
@@ -43,16 +48,24 @@ public:
     FuncSymbol(string name, string type, int offset, bool is_func, vector<string> input_args, bool is_override):
             Symbol(name, type, offset, is_func), input_args(input_args), is_override(is_override){};
     bool isOverride(){return this->is_override;}
+    ostream& printSymbol(std::ostream& os) const override
+    {
+        os << "(" << this->getName() << ", " << this->getType() << ", " << this->getOffset() << ", ";
+        os << "<";
+        int size = this->input_args.size();
+        if (size != 0)
+        {
+            for (int i = 0; i < size - 1; i++)
+                os << this->input_args[i] << ", ";
+            os << this->input_args[size-1];
+        }
+        os << ">";
+        os << ")";
+        return os;
+    }
     friend ostream& operator<<(ostream& os, const FuncSymbol& s)
     {
-        os << "(" << s.getName() << ", " << s.getType() << ", " << s.getOffset() << ", ";
-        os << "< ";
-        for (auto & it : s.input_args)
-        {
-            os << it << ", ";
-        }
-        os << " >";
-        os << ")";
+        s.printSymbol(os);
         return os;
     }
 };

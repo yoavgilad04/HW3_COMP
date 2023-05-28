@@ -8,7 +8,7 @@ void SymbolTable::insert(string name, string type)
     Symbol* s = new Symbol(name, type, this->next_offset);
     this->map.insert(pair<string, Symbol*>(s->getName(), s));
     this->next_offset++;
-    cout << *this;
+    cout << "symbol inserted "<< name << endl;
 }
 
 void SymbolTable::insertFunc(string name, string type, vector<string> input_args, bool is_override)
@@ -16,13 +16,14 @@ void SymbolTable::insertFunc(string name, string type, vector<string> input_args
     FuncSymbol* s = new FuncSymbol(name, type, this->next_offset, true, input_args, is_override);
     this->map.insert(pair<string, Symbol*>(s->getName(), s));
     this->next_offset++;
-    cout << *this;
+    cout << "func symbol inserted "<< name << endl;
 }
 
 void SymbolTable::popBySymbol(Symbol* s)
 {
     this->map.erase(s->getName());
     this->next_offset--;
+
 }
 
 void SymbolTable::popByOffset(int offset)
