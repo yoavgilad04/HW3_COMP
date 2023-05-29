@@ -8,7 +8,7 @@
 #include <string>
 #include <iostream>
 #include <vector>
-
+#include "hw3_output.hpp"
 
 
 
@@ -50,18 +50,28 @@ public:
     bool isOverride(){return this->is_override;}
     ostream& printSymbol(std::ostream& os) const override
     {
-        os << "(" << this->getName() << ", " << this->getType() << ", " << this->getOffset() << ", ";
-        os << "<";
-        int size = this->input_args.size();
-        if (size != 0)
+//        os << "(" << this->getName() << ", " << this->getType() << ", " << this->getOffset() << ", ";
+//        os << "<";
+//        int size = this->input_args.size();
+//        if (size != 0)
+//        {
+//            for (int i = 0; i < size - 1; i++)
+//                os << this->input_args[i] << ", ";
+//            os << this->input_args[size-1];
+//        }
+//        os << ">";
+//        os << ")";
+//        return os;
+//        output::makeFunctionType(this->getType(), this->input_args); //todo: handle this.
+        os << "(";
+        for(int i = 0; i < this->input_args.size(); ++i)
         {
-            for (int i = 0; i < size - 1; i++)
-                os << this->input_args[i] << ", ";
-            os << this->input_args[size-1];
+            os << this->input_args[i];
+            if (i + 1 < this->input_args.size())
+                os << ",";
         }
-        os << ">";
         os << ")";
-        return os;
+        os << "->" << this->getType();
     }
     friend ostream& operator<<(ostream& os, const FuncSymbol& s)
     {

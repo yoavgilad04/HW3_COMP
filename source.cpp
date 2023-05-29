@@ -110,7 +110,7 @@ Exp::Exp(Node &exp, const string &conversion_type)
     }
     if(conversion_type == "id")
     {
-        cout << "Shaked Shtok, yoav will search for ID" << endl;
+        //cout << "Shaked Shtok, yoav will search for ID" << endl;
         //handle ID
         Symbol* t = table_stack.searchForSymbol(exp.getType()); // in this case type will be the name of the id
         if (t == nullptr)
@@ -135,6 +135,7 @@ Exp::Exp(Node &n): Node(n.getType())
             exit(0);
         }
         this->type = "BYTE";
+        return;
     }
     assert(true==false); //must not get here
 }
