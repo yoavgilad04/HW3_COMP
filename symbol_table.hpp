@@ -11,9 +11,10 @@ class SymbolTable
 {
     multimap<string, Symbol*> map;
     int next_offset;
+    int func_arg_offset;
 public:
-    SymbolTable(int next_offset=0):map(), next_offset(next_offset){}
-    void insert(string name, string type);
+    SymbolTable(int next_offset=0):map(), next_offset(next_offset), func_arg_offset(-1){}
+    void insert(string name, string type, bool is_func_arg=false);
     void insertFunc(string name, string type, vector<string> input_args, bool is_override);
     void popBySymbol(Symbol* s);
     void popByOffset(int offset);
@@ -26,15 +27,10 @@ public:
 
     friend ostream& operator<<(ostream& os, const SymbolTable& t)
     {
-        os << "{";
         for (std::multimap<string,Symbol*>::const_iterator it = t.map.begin(); it != t.map.end(); ++it)
         {
-            if (std::next(it) == t.map.end())
-                os << it->first << ": " << *(it->second);
-            else
-                os << it->first << ": " << *(it->second) << ", ";
+            os << *(it->second) << endl;
         }
-        os << "}" << endl;
         return os;
     }
 };

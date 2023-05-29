@@ -4,32 +4,44 @@
     <option name="openedFilesInfos">
       <list>
         <OpenedFileInfo>
-          <option name="caretOffset" value="158" />
-          <option name="fileUrl" value="file://$PROJECT_DIR$/hw3-tests/t1.out" />
-        </OpenedFileInfo>
-        <OpenedFileInfo>
-          <option name="caretOffset" value="84" />
-          <option name="fileUrl" value="file://$PROJECT_DIR$/hw3-tests/t1.in" />
-        </OpenedFileInfo>
-        <OpenedFileInfo>
-          <option name="caretOffset" value="2449" />
+          <option name="caretOffset" value="1628" />
           <option name="fileUrl" value="file://$PROJECT_DIR$/table_stack.cpp" />
         </OpenedFileInfo>
         <OpenedFileInfo>
-          <option name="caretOffset" value="319" />
+          <option name="caretOffset" value="1376" />
           <option name="fileUrl" value="file://$PROJECT_DIR$/symbol_table.cpp" />
         </OpenedFileInfo>
         <OpenedFileInfo>
-          <option name="caretOffset" value="251" />
-          <option name="fileUrl" value="file://$PROJECT_DIR$/hw3-tests/t4.out" />
+          <option name="caretOffset" value="412" />
+          <option name="fileUrl" value="file://$PROJECT_DIR$/source.hpp" />
         </OpenedFileInfo>
         <OpenedFileInfo>
-          <option name="caretOffset" value="2113" />
+          <option name="caretOffset" value="135" />
+          <option name="fileUrl" value="file://$PROJECT_DIR$/hw3-tests/t1.in" />
+        </OpenedFileInfo>
+        <OpenedFileInfo>
+          <option name="caretOffset" value="184" />
+          <option name="fileUrl" value="file://$PROJECT_DIR$/hw3-tests/t1.out" />
+        </OpenedFileInfo>
+        <OpenedFileInfo>
+          <option name="caretOffset" value="45303" />
+          <option name="fileUrl" value="file://$PROJECT_DIR$/parser.tab.cpp" />
+        </OpenedFileInfo>
+        <OpenedFileInfo>
+          <option name="caretOffset" value="169" />
+          <option name="fileUrl" value="file://$PROJECT_DIR$/hw3-tests/testy.in" />
+        </OpenedFileInfo>
+        <OpenedFileInfo>
+          <option name="caretOffset" value="2932" />
+          <option name="fileUrl" value="file://$PROJECT_DIR$/source.cpp" />
+        </OpenedFileInfo>
+        <OpenedFileInfo>
+          <option name="caretOffset" value="1437" />
           <option name="fileUrl" value="file://$PROJECT_DIR$/symbol.hpp" />
         </OpenedFileInfo>
         <OpenedFileInfo>
-          <option name="caretOffset" value="378" />
-          <option name="fileUrl" value="file://$PROJECT_DIR$/hw3_output.cpp" />
+          <option name="caretOffset" value="610" />
+          <option name="fileUrl" value="file://$PROJECT_DIR$/table_stack.hpp" />
         </OpenedFileInfo>
       </list>
     </option>

@@ -18,7 +18,7 @@ class Node {
 protected:
     string type;
 public:
-    Node(string type="Default"): type(type){};
+    Node(string type=""): type(type){};
     string getType(){return this->type;}
     virtual ~Node() = default;
 };

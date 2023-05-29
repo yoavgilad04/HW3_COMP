@@ -3,11 +3,21 @@
 //
 #include "symbol_table.hpp"
 
-void SymbolTable::insert(string name, string type)
+void SymbolTable::insert(string name, string type, bool is_func_arg)
 {
-    Symbol* s = new Symbol(name, type, this->next_offset);
+    int new_offset;
+    if (is_func_arg)
+    {
+        new_offset = this->func_arg_offset;
+        this->func_arg_offset--;
+    }
+    else
+    {
+        new_offset = this->next_offset;
+        this->next_offset++;
+    }
+    Symbol* s = new Symbol(name, type, new_offset);
     this->map.insert(pair<string, Symbol*>(s->getName(), s));
-    this->next_offset++;
 //    cout << "symbol inserted "<< name << endl;
 }
 
@@ -18,11 +28,26 @@ void SymbolTable::insertFunc(string name, string type, vector<string> input_args
 //    cout << "func symbol inserted "<< name << endl;
 }
 
+vector<FuncSymbol*> SymbolTable::getAllFunctionWithName(string name)
+{
+    vector<FuncSymbol*> funcs();
+    for (std::multimap<string,Symbol*>::iterator it = this->map.begin(); it != this->map.end();++it)
+    {
+        FuncSymbol* f = dynamic_cast<FuncSymbol*>(*it);
+        if (f != nullptr && f->getName() == name)
+        {
+            funcs.push_back(f);
+        }
+    }
+    if (funcs.empty())
+        return nullptr;
+    return funcs;
+}
+
 void SymbolTable::popBySymbol(Symbol* s)
 {
     this->map.erase(s->getName());
     this->next_offset--;
-
 }
 
 void SymbolTable::popByOffset(int offset)

@@ -14,7 +14,7 @@
 using namespace std;
 
 extern int yylineno;
-
+//Saved?
 class TableStack
 {
     std::vector<SymbolTable*> tables;
@@ -22,8 +22,9 @@ public:
     TableStack():tables(){}
     void openNewScope();
     void closeScope();
-    void addSymbolToLastTable(string name, string type);
+    void addSymbolToLastTable(string name, string type, bool is_func_arg=false);
     void addFuncSymbol(string name, string type, string args, string is_override);
+    vector<FuncSymbol*> getAllFunctionsWithName(string name);
     Symbol* searchForSymbol(string name);
     void compareType(string id_name, string exp_type);
     void printStack();

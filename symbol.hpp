@@ -30,7 +30,8 @@ public:
     void setOffset(int offset){this->offset = offset;}
     virtual ostream& printSymbol(std::ostream& os) const
     {
-        os << "(" << this->getName() << ", " << this->getType() << ", " << this->getOffset() << ")";
+//        os << "(" << this->getName() << ", " << this->getType() << ", " << this->getOffset() << ")";
+        os << this->getName() << " " << this->getType() <<  " " << this->getOffset();
         return os;
     }
     friend ostream& operator<<(ostream& os, const Symbol& s)
@@ -48,6 +49,7 @@ public:
     FuncSymbol(string name, string type, int offset, bool is_func, vector<string> input_args, bool is_override):
             Symbol(name, type, offset, is_func), input_args(input_args), is_override(is_override){};
     bool isOverride(){return this->is_override;}
+    vector<string> getArgs(){return this->input_args;}
     ostream& printSymbol(std::ostream& os) const override
     {
 //        os << "(" << this->getName() << ", " << this->getType() << ", " << this->getOffset() << ", ";
@@ -63,6 +65,7 @@ public:
 //        os << ")";
 //        return os;
 //        output::makeFunctionType(this->getType(), this->input_args); //todo: handle this.
+        os << this->getName() << " ";
         os << "(";
         for(int i = 0; i < this->input_args.size(); ++i)
         {
@@ -71,7 +74,7 @@ public:
                 os << ",";
         }
         os << ")";
-        os << "->" << this->getType();
+        os << "->" << this->getType() << " " << this->getOffset();
     }
     friend ostream& operator<<(ostream& os, const FuncSymbol& s)
     {

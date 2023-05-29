@@ -147,12 +147,12 @@ Call::Call(Node &function_name) {
 Call::Call(Node &function_name, Node* exp_list) {
     ExpList* expList = dynamic_cast<ExpList*>(exp_list);
     vector<string>* true_exp_list = expList->getExpList();
-    cout << "======" << endl;
-    for(auto e : *true_exp_list)
-    {
-        cout << e << ' ';
-    }
-    cout << endl;
-    cout << "======" << endl;
+//    cout << "======" << endl;
+//    for(auto e : *true_exp_list)
+//    {
+//        cout << e << ' ';
+//    }
+//    cout << endl;
+//    cout << "======" << endl;
 }
 
