@@ -47,7 +47,7 @@ public:
     FormalList(Node& formal, Node& old_list)
     {
         string formal_list = formal.getType() + "," + old_list.getType();
-        //todo: delete pre nodes
+        // todo: delete pre nodes
         this->type = formal_list;
     }
 

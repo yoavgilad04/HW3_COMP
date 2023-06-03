@@ -140,13 +140,59 @@ Exp::Exp(Node &n): Node(n.getType())
     assert(true==false); //must not get here
 }
 
-Call::Call(Node &function_name) {
-    cout << function_name.getType() << endl;
+Call::Call(Node &function_name)
+{
+    string name = function_name.getType();
+    vector<FuncSymbol*> funcs = table_stack.getAllFunctionsWithName(name);
+    if (funcs.empty())
+    {
+        output::errorUndefFunc(yylineno,name);
+    }
+    bool foundEligibleFunc = false;
+    for (int i=0; i<funcs.size(); i++)
+    {
+        vector<string> func_args = funcs[i]->getArgs();
+        if(func_args.size() == 0)
+        {
+            foundEligibleFunc = true;
+            break; // as no two functions whereas their only different is their return type is allowed
+        }
+    }
+    if(!foundEligibleFunc)
+        output::errorPrototypeMismatch(yylineno,name);
+    this->type = "VOID";
 }
 
-Call::Call(Node &function_name, Node* exp_list) {
+Call::Call(Node &function_name, Node* exp_list)
+{
     ExpList* expList = dynamic_cast<ExpList*>(exp_list);
     vector<string>* true_exp_list = expList->getExpList();
+    int candidate_funcs = 0;
+    string func_type ="";
+    string name = function_name.getType();
+    vector<FuncSymbol*> funcs = table_stack.getAllFunctionsWithName(name);
+    if (funcs.empty())
+    {
+        output::errorUndefFunc(yylineno,name);
+    }
+    for (int i=0; i<funcs.size(); i++)
+    {
+        vector<string> func_args = funcs[i]->getArgs();
+        if(TableStack::isVectorEqualWithConvert(func_args, *true_exp_list))
+        {
+            func_type = funcs[i]->getType();
+            candidate_funcs++;
+        }
+        if(candidate_funcs > 1)
+        {
+            output::errorAmbiguousCall(yylineno, name);
+        }
+    }
+    if(candidate_funcs == 0)
+    {
+        output::errorPrototypeMismatch(yylineno,name);
+    }
+    this->type = func_type;
 //    cout << "======" << endl;
 //    for(auto e : *true_exp_list)
 //    {
