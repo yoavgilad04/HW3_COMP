@@ -109,7 +109,7 @@ void TableStack::openNewScope()
         new_offset = 0;
     }
     else
-        new_offset = this->tables[this->tables.size() - 1]->getSymbolTableOffset() + 1;
+        new_offset = this->tables[this->tables.size() - 1]->getSymbolTableOffset();
     SymbolTable* t = new SymbolTable(new_offset);
     this->tables.push_back(t);
 //    cout << "scope opened!" << endl;

@@ -18,14 +18,14 @@ void SymbolTable::insert(string name, string type, bool is_func_arg)
     }
     Symbol* s = new Symbol(name, type, new_offset);
     this->map.insert(pair<string, Symbol*>(s->getName(), s));
-//    cout << "symbol inserted "<< name << endl;
+    this->vec.push_back(s);
 }
 
 void SymbolTable::insertFunc(string name, string type, vector<string> input_args, bool is_override)
 {
     FuncSymbol* s = new FuncSymbol(name, type, 0, true, input_args, is_override);
     this->map.insert(pair<string, Symbol*>(s->getName(), s));
-//    cout << "func symbol inserted "<< name << endl;
+    this->vec.push_back(s);
 }
 
 vector<FuncSymbol*> SymbolTable::getAllFunctionWithName(string name)
