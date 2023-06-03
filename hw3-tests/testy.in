@@ -12,6 +12,6 @@ void main()
     int x = 4;
     byte c = 3;
     byte y = 100 b;
-    bool d = true;
+    bool b = true;
     printOk(x>y);
 }
