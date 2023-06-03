@@ -49,7 +49,7 @@ public:
     FuncSymbol(string name, string type, int offset, bool is_func, vector<string> input_args, bool is_override):
             Symbol(name, type, offset, is_func), input_args(input_args), is_override(is_override){};
     bool isOverride(){return this->is_override;}
-    vector<string> getArgs(){return this->input_args;}
+    vector<string> getArgs() const {return this->input_args;}
     ostream& printSymbol(std::ostream& os) const override
     {
 //        os << "(" << this->getName() << ", " << this->getType() << ", " << this->getOffset() << ", ";
@@ -74,7 +74,8 @@ public:
                 os << ",";
         }
         os << ")";
-        os << "->" << this->getType() << " " << this->getOffset();
+        os << "->" << this->getType() << " " << this->getOffset() << endl;
+        return os;
     }
     friend ostream& operator<<(ostream& os, const FuncSymbol& s)
     {

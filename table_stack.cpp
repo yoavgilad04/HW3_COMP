@@ -14,7 +14,7 @@ std::vector<std::string> splitString(const std::string& inputString) {
     return words;
 }
 
-bool isVectorsEqual(const std::vector<string>& v1, std::vector<string>& v2)
+bool isVectorsEqual(const std::vector<string>& v1,const std::vector<string>& v2)
 {
     if (v1.size() != v2.size())
         return false;
@@ -43,7 +43,7 @@ void TableStack::addFuncSymbol(string name, string type, string args, string is_
         is_over = false;
     }
     vector<FuncSymbol*> funcs = this->getAllFunctionsWithName(name);
-    if (func != nullptr)
+    if (!funcs.empty())
     {
         if (!funcs[0]->isOverride())
             output::errorFuncNoOverride(yylineno, name);
@@ -51,7 +51,8 @@ void TableStack::addFuncSymbol(string name, string type, string args, string is_
             output::errorOverrideWithoutDeclaration(yylineno, name);
         for (int i=0; i<funcs.size(); i++)
         {
-            if (isVectorsEqual(input_args, funcs[i].getArgs()))
+            vector<string> func_args = funcs[i]->getArgs();
+            if (isVectorsEqual(input_args, func_args))
                 output::errorDef(yylineno, name);
         }
 
@@ -90,11 +91,13 @@ void TableStack::addSymbolToLastTable(string name, string type, bool is_func_arg
 
 vector<FuncSymbol*> TableStack::getAllFunctionsWithName(string name)
 {
-    vector<FuncSymbol*> funcs();
+    vector<FuncSymbol*> funcs;
     for(int i=0; i<this->tables.size(); i++)
-        funcs.insert(funcs.end(), this->tables[i].begin(), this->tables[i].end());
-    if (funcs.empty())
-        return nullptr;
+    {
+        vector<FuncSymbol*> symbol_table_funcs = this->tables[i]->getAllFunctionWithName(name);
+        if (!symbol_table_funcs.empty())
+            funcs.insert(funcs.end(), symbol_table_funcs.begin(), symbol_table_funcs.end());
+    }
     return funcs;
 }
 
@@ -166,7 +169,6 @@ TableStack::~TableStack()
 
 void TableStack::compareType(string id_name, string exp_type)
 {
-    cout<<"In compareType function, id: " << id_name << " exp_type: " << exp_type << endl;
     Symbol* s = this->searchForSymbol(id_name);
     if (s == nullptr)
         output::errorUndef(yylineno, id_name);

@@ -44,10 +44,12 @@ string output::makeFunctionType(const string& retType, std::vector<string>& argT
 
 void output::errorLex(int lineno){
     cout << "line " << lineno << ":" << " lexical error" << endl;
+    exit(0);
 }
 
 void output::errorSyn(int lineno){
     cout << "line " << lineno << ":" << " syntax error" << endl;
+    exit(0);
 }
 
 void output::errorUndef(int lineno, const string& id){
@@ -57,10 +59,12 @@ void output::errorUndef(int lineno, const string& id){
 
 void output::errorDef(int lineno, const string& id){
     cout << "line " << lineno << ":" << " identifier " << id << " is already defined" << endl;
+    exit(0);
 }
 
 void output::errorUndefFunc(int lineno, const string& id) {
     cout << "line " << lineno << ":" << " function " << id << " is not defined" << endl;
+    exit(0);
 }
 
 void output::errorMismatch(int lineno){
@@ -70,6 +74,7 @@ void output::errorMismatch(int lineno){
 
 void output::errorPrototypeMismatch(int lineno, const string& id) {
     cout << "line " << lineno << ": prototype mismatch, function " << id << endl;
+    exit(0);
 }
 
 void output::errorUnexpectedBreak(int lineno) {
@@ -89,6 +94,7 @@ void output::errorMainMissing() {
 
 void output::errorByteTooLarge(int lineno, const string& value) {
     cout << "line " << lineno << ": byte value " << value << " out of range" << endl;
+    exit(0);
 }
 
 void output::errorFuncNoOverride(int lineno, const string& id) {
@@ -103,10 +109,12 @@ void output::errorOverrideWithoutDeclaration(int lineno, const string& id) {
 
 void output::errorAmbiguousCall(int lineno, const string& id) {
     cout << "line " << lineno << ": ambiguous call to overloaded function " << id << endl;
+    exit(0);
 }
 
 void output::errorMainOverride(int lineno){
     cout << "line " << lineno << ": main is not allowed to be overridden" << endl;
+    exit(0);
 }
 
 // TODO: DELETE

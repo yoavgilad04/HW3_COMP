@@ -21,6 +21,7 @@ public:
     Symbol* getSymbolByName(string name);
     Symbol* getSymbolByOffset(int offset);
     bool isEmpty();
+    vector<FuncSymbol*> getAllFunctionWithName(string name);
     int getSymbolTableOffset(){return this->next_offset;}
     ~SymbolTable();
 

@@ -1,5 +1,15 @@
-void printOk(bool isOk) {
+override void printOk(bool isOk) {
     if (isOk) print("ok");
+}
+
+override void printOk(bool mamamia, int x)
+{
+    return mamamia;
+}
+
+override void printOk(bool mamamia)
+{
+    return mamamia;
 }
 
 void main()
@@ -7,7 +17,4 @@ void main()
     int x = 4;
     byte y = 100 b;
     printOk(x>y);
-    int z;
-    if (z > x)
-        int y = 3;
 }

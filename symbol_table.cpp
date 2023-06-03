@@ -30,17 +30,16 @@ void SymbolTable::insertFunc(string name, string type, vector<string> input_args
 
 vector<FuncSymbol*> SymbolTable::getAllFunctionWithName(string name)
 {
-    vector<FuncSymbol*> funcs();
+    vector<FuncSymbol*> funcs;
+
     for (std::multimap<string,Symbol*>::iterator it = this->map.begin(); it != this->map.end();++it)
     {
-        FuncSymbol* f = dynamic_cast<FuncSymbol*>(*it);
+        FuncSymbol* f = dynamic_cast<FuncSymbol*>(it->second);
         if (f != nullptr && f->getName() == name)
         {
             funcs.push_back(f);
         }
     }
-    if (funcs.empty())
-        return nullptr;
     return funcs;
 }
 
