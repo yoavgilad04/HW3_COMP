@@ -1,0 +1,28 @@
+override byte lala(int x)
+{
+    x = 8;
+}
+
+override byte lala(bool x)
+{
+    lala(false);
+    x = false;
+}
+
+int bar()
+{
+    return 8b;
+}
+
+void main()
+{
+    int a;
+    int c;
+    if(a>c)
+        int d = 3;
+    lala(5);
+    lala(2b);
+    return;
+}
+
+

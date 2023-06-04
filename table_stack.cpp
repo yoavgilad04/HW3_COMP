@@ -3,7 +3,7 @@
 //
 #include "table_stack.hpp"
 
-std::vector<std::string> splitString(const std::string& inputString) {
+std::vector<std::string> TableStack::splitString(const std::string& inputString) {
     std::vector<std::string> words;
     std::stringstream ss(inputString);
     std::string word;
@@ -14,13 +14,36 @@ std::vector<std::string> splitString(const std::string& inputString) {
     return words;
 }
 
-bool isVectorsEqual(const std::vector<string>& v1,const std::vector<string>& v2)
+bool TableStack::isValidConvert(string left_type, string right_type)
+{
+    if (left_type != right_type)
+    {
+        if(left_type == "INT" && right_type == "BYTE")
+            return true;
+        return false;
+    }
+    return true;
+}
+
+bool TableStack::isVectorsEqual(const std::vector<string>& v1,const std::vector<string>& v2)
 {
     if (v1.size() != v2.size())
         return false;
     for(int i=0; i<v1.size(); i++)
     {
         if (v1[i] != v2[i])
+            return false;
+    }
+    return true;
+}
+
+bool TableStack::isVectorEqualWithConvert(const std::vector<string>& left_v,const std::vector<string>& right_v)
+{
+    if (left_v.size() != right_v.size())
+        return false;
+    for(int i=0; i<left_v.size(); i++)
+    {
+        if (!isValidConvert(left_v[i],right_v[i]))
             return false;
     }
     return true;
@@ -33,7 +56,9 @@ void TableStack::addFuncSymbol(string name, string type, string args, string is_
     if (name == "main")
     {
         Symbol* potential_main = searchForSymbol(name);
-        if (potential_main != nullptr || is_override == "OVERRIDE")
+        if (potential_main != nullptr)
+            output::errorDef(yylineno,name);
+        if(is_override == "OVERRIDE")
             output::errorMainOverride(yylineno);
     }
     vector<string> input_args = splitString(args);
@@ -45,9 +70,9 @@ void TableStack::addFuncSymbol(string name, string type, string args, string is_
     vector<FuncSymbol*> funcs = this->getAllFunctionsWithName(name);
     if (!funcs.empty())
     {
-        if (!funcs[0]->isOverride())
+        if ((is_over) && (!funcs[0]->isOverride()))
             output::errorFuncNoOverride(yylineno, name);
-        if (!is_over)
+        if ((!is_over) && (funcs[0]->isOverride()))
             output::errorOverrideWithoutDeclaration(yylineno, name);
         for (int i=0; i<funcs.size(); i++)
         {
@@ -58,9 +83,18 @@ void TableStack::addFuncSymbol(string name, string type, string args, string is_
 
     }
     if (this->tables.size() > 1)
-        this->tables[this->tables.size()-2]->insertFunc(name, type, input_args, is_over); // we want the func symbol to enter previous scope
+    {
+        this->tables[this->tables.size() - 2]->insertFunc(name, type, input_args,
+                                                          is_over); // we want the func symbol to enter previous scope
+        this->tables[this->tables.size() - 2]->setTableReturnType(type);
+        this->tables[this->tables.size() - 2]->setScopeAsFunc();
+    }
     else
-        this->tables[this->tables.size()-1]->insertFunc(name, type, input_args, is_over);
+    {
+        this->tables[this->tables.size() - 1]->insertFunc(name, type, input_args, is_over);
+        this->tables[this->tables.size() - 1]->setTableReturnType(type);
+        this->tables[this->tables.size() - 1]->setScopeAsFunc();
+    }
 
 }
 
@@ -84,9 +118,22 @@ void TableStack::addSymbolToLastTable(string name, string type, bool is_func_arg
 {
     if (this->tables.empty())
         throw std::invalid_argument("Trying to add element when there are no scopes in stack");
-    if (this->searchForSymbol(name) != nullptr)
+    Symbol* s = this->searchForSymbol(name);
+    if (s != nullptr)
         output::errorDef(yylineno, name);
     this->tables[this->tables.size()-1]->insert(name, type, is_func_arg);
+}
+
+void TableStack::addSymbolToLastTable(string name, string type, string exp_type)
+{
+    if (this->tables.empty())
+        throw std::invalid_argument("Trying to add element when there are no scopes in stack");
+    Symbol* s = this->searchForSymbol(name);
+    if (s != nullptr)
+        output::errorDef(yylineno, name);
+    if (!isValidConvert(type, exp_type))
+        output::errorMismatch(yylineno);
+    this->tables[this->tables.size()-1]->insert(name, type);
 }
 
 vector<FuncSymbol*> TableStack::getAllFunctionsWithName(string name)
@@ -126,7 +173,7 @@ void TableStack::closeScope()
     {
 //        cout <<"I'm in last scope" << endl;
         FuncSymbol* main = dynamic_cast<FuncSymbol*>(this->searchForSymbol("main"));
-        if (main == nullptr || main->getType() != "VOID")
+        if (main == nullptr || main->getType() != "VOID" || (!main->getArgs().empty()))
             output::errorMainMissing();
     }
 
@@ -172,8 +219,18 @@ void TableStack::compareType(string id_name, string exp_type)
     Symbol* s = this->searchForSymbol(id_name);
     if (s == nullptr)
         output::errorUndef(yylineno, id_name);
-    if (s->getType() != exp_type)
+//    cout << "left type:" << s->getType() << "right type" << exp_type << endl;
+    if (!isValidConvert(s->getType(), exp_type))
         output::errorMismatch(yylineno);
 }
 
-
+void TableStack::checkReturnType(std::string type) {
+    int current_scope = this->tables.size()-1;
+    while(!this->tables[current_scope]->isFunc())
+    {
+        current_scope--;
+    }
+//    cout << "function return type is:" << this->tables[current_scope]->getTableReturnType() << "return candidate type is:" << type << endl;
+    if(!isValidConvert(this->tables[current_scope]->getTableReturnType(), type))
+        output::errorMismatch(yylineno);
+}

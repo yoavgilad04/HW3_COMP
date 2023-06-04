@@ -14,4 +14,16 @@ void main()
     byte y = 100 b;
     bool b = true;
     printOk(x>y);
+    d = false;
+}
+
+byte foo()
+{
+    while(3<8)
+    {
+        return 8b;
+    }
+    foo();
+    foo(3);
+    return 8b;
 }
