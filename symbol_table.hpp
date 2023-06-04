@@ -28,6 +28,7 @@ public:
     Symbol* getSymbolByName(string name);
     Symbol* getSymbolByOffset(int offset);
     bool isEmpty();
+    vector<Symbol*> getLastNSymbols(int n);
     bool isFunc(){return this->is_func_scope;}
     string getTableReturnType(){return this->table_return_type;}
     vector<FuncSymbol*> getAllFunctionWithName(string name);

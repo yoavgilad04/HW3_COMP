@@ -62,6 +62,16 @@ void TableStack::addFuncSymbol(string name, string type, string args, string is_
             output::errorMainOverride(yylineno);
     }
     vector<string> input_args = splitString(args);
+    if(input_args.size() > 0 && this->tables.size() > 1)
+    {
+        SymbolTable* last_table = this->tables[this->tables.size()-1];
+        vector<Symbol*> last_args = last_table->getLastNSymbols(input_args.size());
+        for (Symbol* symbol :last_args)
+        {
+            if(name == symbol->getName())
+                output::errorDef(yylineno, name);
+        }
+    }
     bool is_over = true;
     if (is_override != "OVERRIDE")
     {
@@ -74,13 +84,14 @@ void TableStack::addFuncSymbol(string name, string type, string args, string is_
             output::errorFuncNoOverride(yylineno, name);
         if ((!is_over) && (funcs[0]->isOverride()))
             output::errorOverrideWithoutDeclaration(yylineno, name);
+        if ((!is_over) && (!funcs[0]->isOverride()))
+            output::errorDef(yylineno, name);
         for (int i=0; i<funcs.size(); i++)
         {
             vector<string> func_args = funcs[i]->getArgs();
             if (isVectorsEqual(input_args, func_args))
                 output::errorDef(yylineno, name);
         }
-
     }
     if (this->tables.size() > 1)
     {
@@ -206,8 +217,8 @@ void TableStack::printStack()
 
 TableStack::~TableStack()
 {
-    if (this->tables.size() != 0)
-        cout <<"ERROR: More then one Scope when deleteing tableStack";
+//    if (this->tables.size() != 0)
+//        cout <<"ERROR: More then one Scope when deleteing tableStack";
     for(int i=0; i<this->tables.size(); i++)
     {
         delete this->tables[i];

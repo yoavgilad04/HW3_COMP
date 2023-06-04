@@ -92,4 +92,13 @@ SymbolTable::~SymbolTable()
     }
 }
 
+vector<Symbol*> SymbolTable::getLastNSymbols(int n)
+{
+    vector<Symbol*> last_args;
+    for (int i=this->vec.size()-1; i<this->vec.size()-1-n; i--){
+        last_args.push_back(vec[i]);
+    }
+    return last_args;
+}
+
 

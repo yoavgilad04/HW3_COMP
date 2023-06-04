@@ -7,6 +7,7 @@
 
 TableStack table_stack;
 bool is_in_loop = false;
+int loop_count = 0;
 
 bool isInt(const std::string &str) {
     try {
@@ -144,23 +145,26 @@ Call::Call(Node &function_name)
 {
     string name = function_name.getType();
     vector<FuncSymbol*> funcs = table_stack.getAllFunctionsWithName(name);
+
     if (funcs.empty())
     {
         output::errorUndefFunc(yylineno,name);
     }
     bool foundEligibleFunc = false;
+    string func_type ="";
     for (int i=0; i<funcs.size(); i++)
     {
         vector<string> func_args = funcs[i]->getArgs();
         if(func_args.size() == 0)
         {
             foundEligibleFunc = true;
+            func_type = funcs[i]->getType();
             break; // as no two functions whereas their only different is their return type is allowed
         }
     }
     if(!foundEligibleFunc)
         output::errorPrototypeMismatch(yylineno,name);
-    this->type = "VOID";
+    this->type = func_type;
 }
 
 Call::Call(Node &function_name, Node* exp_list)

@@ -8,7 +8,7 @@ using namespace std;
 extern int yylex();
 void yyerror(const char*);
 extern TableStack table_stack;
-extern bool is_in_loop;
+extern int loop_count;
 %}
 
 %nonassoc STRING;
@@ -113,17 +113,17 @@ Statement:      LBRACE N Statements RBRACE C                                    
                 | IF LPAREN BOOLEXP RPAREN N Statement C                            {output::printProductionRule(23);}
                 | IF LPAREN BOOLEXP RPAREN N Statement C ELSE N Statement C         {output::printProductionRule(24);}
                 | WHILE LPAREN BOOLEXP RPAREN N INLOOP Statement OFFLOOP C          {output::printProductionRule(25);}
-                | BREAK SC                                                          {if (!is_in_loop)
+                | BREAK SC                                                          {if (loop_count == 0)
                                                                                      output::errorUnexpectedBreak(yylineno);
                                                                                      output::printProductionRule(26);}
 
-                | CONTINUE SC                                                       {if (!is_in_loop)
+                | CONTINUE SC                                                       {if (loop_count == 0)
                                                                                      output::errorUnexpectedContinue(yylineno);
                                                                                      output::printProductionRule(27);}
 ;
 
-INLOOP: epsilon                                                                     {is_in_loop = true;}
-OFFLOOP: epsilon                                                                    {is_in_loop = false;}
+INLOOP: epsilon                                                                     {loop_count++;}
+OFFLOOP: epsilon                                                                    {loop_count--;}
 BOOLEXP: Exp                                                                        {if($1->getType()!="BOOL")
                                                                                      output::errorMismatch(yylineno);}
 
